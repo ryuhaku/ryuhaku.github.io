@@ -4,69 +4,489 @@
   <meta charset="utf-8">
   <title>Ryuhaku</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI & Data consultant exploring enterprise data strategy, local AI tooling, image generation tooling, and workflow automation.">
   <style>
+    :root {
+      --bg: #1f2024;
+      --panel: #2a2c33;
+      --panel-2: #24262d;
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #f3f4f6;
+      --muted: #c3c7d0;
+      --subtle: #8b93a3;
+      --accent: #38bdf8;
+      --accent-2: #a78bfa;
+      --chip: rgba(56, 189, 248, 0.12);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      max-width: 760px;
-      margin: 48px auto;
-      padding: 0 20px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.7;
-      color: #1f2937;
-      background: #f9fafb;
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.72;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 10%, rgba(56, 189, 248, 0.12), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(167, 139, 250, 0.12), transparent 28%),
+        var(--bg);
+      min-height: 100vh;
     }
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 0.2em;
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
     }
-    .subtitle {
-      color: #4b5563;
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(31, 32, 36, 0.88);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav {
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
       font-size: 1.05rem;
+      font-weight: 750;
+      letter-spacing: 0.02em;
+      color: var(--text);
     }
-    section {
-      margin-top: 32px;
+
+    .navlinks {
+      display: flex;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
     }
-    a {
-      color: #2563eb;
+
+    .navlinks a { color: var(--muted); }
+    .navlinks a:hover { color: var(--text); text-decoration: none; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) 340px;
+      gap: 48px;
+      align-items: start;
+      padding: 72px 0 44px;
     }
-    .card {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.94rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 5.8rem);
+      line-height: 0.94;
+      letter-spacing: -0.075em;
+      font-weight: 760;
+    }
+
+    .subtitle {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2.1vw, 1.25rem);
+      max-width: 760px;
+    }
+
+    .lead {
+      margin: 28px 0 0;
+      color: #e5e7eb;
+      font-size: 1.05rem;
+      max-width: 760px;
+    }
+
+    .lead strong { color: var(--text); font-weight: 760; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-weight: 680;
+      transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      text-decoration: none;
+      border-color: rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #08111f;
+      border-color: transparent;
+    }
+
+    .profile-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(42, 44, 51, 0.96), rgba(36, 38, 45, 0.96));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: sticky;
+      top: 86px;
+    }
+
+    .avatar-frame {
+      background: #3a3b41;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .avatar {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1.16 / 1;
+      object-fit: cover;
       border-radius: 12px;
-      padding: 18px 20px;
-      margin-top: 12px;
+      background: #4b5563;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .profile-body { padding: 20px; }
+
+    .profile-name {
+      margin: 0 0 10px;
+      font-size: 1.18rem;
+      font-weight: 780;
+      line-height: 1.32;
+    }
+
+    .profile-meta {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .profile-meta span { display: block; }
+
+    .mini-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .mini-chip {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #dbeafe;
+      font-size: 0.78rem;
+    }
+
+    section { padding: 36px 0; }
+
+    .section-title {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      letter-spacing: -0.05em;
+      line-height: 1.1;
+      font-weight: 760;
+    }
+
+    .section-note { margin: 0; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(42, 44, 51, 0.70);
+      padding: 22px;
+    }
+
+    .card h3 { margin: 0 0 8px; font-size: 1.05rem; color: var(--text); }
+    .card p { margin: 0; color: var(--muted); font-size: 0.96rem; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      color: #bae6fd;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .activity {
+      display: none;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(42, 44, 51, 0.78);
+      padding: 24px;
+    }
+
+    .project h3 { margin: 0 0 8px; font-size: 1.22rem; }
+    .project p { margin: 0; color: var(--muted); }
+
+    .tag {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(167, 139, 250, 0.14);
+      color: #ddd6fe;
+      border: 1px solid rgba(167, 139, 250, 0.22);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .about-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(42, 44, 51, 0.70);
+      padding: 24px;
+      color: var(--muted);
+    }
+
+    .about-card p { margin: 0; }
+
+    footer {
+      padding: 42px 0 68px;
+      color: var(--subtle);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; padding-top: 56px; }
+      .profile-card { position: static; max-width: 420px; }
+      .section-title { grid-template-columns: 1fr; gap: 10px; }
+      .grid { grid-template-columns: 1fr; }
+      .project { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 28px, 1120px); }
+      .navlinks { display: none; }
+      .hero { gap: 28px; }
+      .avatar { aspect-ratio: 1.25 / 1; }
     }
   </style>
 </head>
 <body>
-  <h1>Ryuhaku</h1>
-  <p class="subtitle">AI & Data consultant exploring local LLMs, image generation, and workflow automation.</p>
-
-  <section>
-    <h2>About</h2>
-    <p>
-      I work around enterprise AI and data topics, and experiment with local AI tools,
-      image generation workflows, and small automation utilities.
-    </p>
-  </section>
-
-  <section>
-    <h2>Interests</h2>
-    <ul>
-      <li>Local LLMs and LM Studio</li>
-      <li>Stable Diffusion / Forge / ComfyUI workflows</li>
-      <li>WebUI extensions and browser automation</li>
-      <li>Enterprise data strategy, governance, and automation</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Projects</h2>
-    <div class="card">
-      <h3>LLMuse improvements</h3>
-      <p>
-        Added optional auto-generate and continuous generation workflows for a Stable Diffusion WebUI extension.
-      </p>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#">Ryuhaku</a>
+      <nav class="navlinks" aria-label="Navigation">
+        <a href="#interests">Interests</a>
+        <a href="#about">About</a>
+      </nav>
     </div>
-  </section>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Enterprise Data · Local AI · Automation</div>
+        <h1>Ryuhaku</h1>
+        <p class="subtitle">
+          AI & Data consultant exploring enterprise data strategy, local AI tooling,
+          image generation tooling, and workflow automation.
+        </p>
+        <p class="lead">
+          I work around <strong>enterprise AI and data topics</strong>, while experimenting with
+          local AI tools, WebUI extensions, prompt design, and small utilities that make
+          creative and technical work smoother.
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/ryuhaku">GitHub profile</a>
+          <a class="btn" href="#interests">View interests</a>
+        </div>
+      </div>
+
+      <aside class="profile-card" aria-label="Profile">
+        <div class="avatar-frame">
+          <img class="avatar" src="https://github.com/ryuhaku.png" alt="Ryuhaku avatar">
+        </div>
+        <div class="profile-body">
+          <p class="profile-name">AI & Data / Local AI Tooling</p>
+          <p class="profile-meta">
+            <span>Enterprise data strategy</span>
+            <span>Data governance</span>
+            <span>Local LLMs</span>
+            <span>Image generation tooling</span>
+            <span>Workflow automation</span>
+          </p>
+          <div class="mini-chips" aria-label="Keywords">
+            <span class="mini-chip">Prompt design</span>
+            <span class="mini-chip">LM Studio</span>
+            <span class="mini-chip">Forge</span>
+            <span class="mini-chip">ComfyUI</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="interests">
+      <div class="section-title">
+        <h2>Interests</h2>
+        <p class="section-note">
+          A mix of enterprise AI/data thinking and hands-on local AI experimentation.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Enterprise AI & Data</h3>
+          <p>
+            Strategy, governance, and automation patterns for practical AI and data use cases
+            in enterprise environments.
+          </p>
+          <div class="chips">
+            <span class="chip">Data strategy</span>
+            <span class="chip">Governance</span>
+            <span class="chip">AI adoption</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Local LLMs</h3>
+          <p>
+            Experiments with LM Studio, local model operation, prompt design, and lightweight
+            utilities for AI-assisted workflows.
+          </p>
+          <div class="chips">
+            <span class="chip">LM Studio</span>
+            <span class="chip">Local models</span>
+            <span class="chip">Prompt design</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Image generation tooling</h3>
+          <p>
+            Tooling and workflow improvements around Stable Diffusion, Forge, ComfyUI,
+            and creative AI iteration.
+          </p>
+          <div class="chips">
+            <span class="chip">Stable Diffusion</span>
+            <span class="chip">Forge</span>
+            <span class="chip">ComfyUI</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Workflow automation</h3>
+          <p>
+            Small utilities and UI improvements that reduce repeated manual steps in local AI
+            and creative workflows.
+          </p>
+          <div class="chips">
+            <span class="chip">Extensions</span>
+            <span class="chip">Automation</span>
+            <span class="chip">WebUI tooling</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="recent-activity" class="activity" aria-hidden="true">
+      <div class="section-title">
+        <h2>Recent activity</h2>
+        <p class="section-note">Small contributions and experiments around local AI workflows.</p>
+      </div>
+
+      <article class="project">
+        <div>
+          <h3>LLMuse continuous generation contribution</h3>
+          <p>
+            Contributed and merged optional Auto-generate / Continuous generation improvements
+            for a local LLM-assisted image generation workflow.
+          </p>
+        </div>
+        <span class="tag">Merged PR</span>
+      </article>
+    </section>
+
+    <section id="about">
+      <div class="section-title">
+        <h2>About</h2>
+        <p class="section-note">
+          Bridging structured enterprise thinking with practical local AI experimentation.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <p>
+          My interests sit between AI/data strategy and hands-on tooling: turning repeated
+          workflows into small utilities, improving local AI environments, and exploring how
+          prompt design and automation can make AI tools easier to control and use.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Ryuhaku · Built on GitHub Pages
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
